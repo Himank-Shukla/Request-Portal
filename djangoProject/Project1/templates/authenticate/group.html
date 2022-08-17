@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    {%load static%}
+    <link rel="stylesheet" href="{%static 'home.css' %}"/>
+    <link rel="stylesheet" href="{%static 'request.css' %}"/>
+
+
+
+
+</head>
+
+<body>
+<div class="topnav">
+    <a href="/" class="logo_div"><img src="{%static 'images/logo.png' %}" alt="Logo" class="logo"/></a>
+    <a href="/" id="back">&lt; Home</a>
+    <a href="/profile" class="split"><img src="{%static 'images/profile.png' %}" alt="profile" class="profile"/></a>
+</div>
+<div class="sidebar">
+    <a href="/"><i class="glyphicon glyphicon-home"></i> Home</a>
+    <a href="#"><i class="glyphicon glyphicon-file"></i> New Requests</a>
+    <a href="/group"><i class="glyphicon glyphicon-user"></i> Group Info.</a>
+    <a href="/myrequests"><i class="glyphicon glyphicon-time"></i> My Requests</a>
+    <a href="/pending" class="manager" id="manager">
+        <i class="glyphicon glyphicon-th-list"></i>Pending Requests
+        <span class="badge badge-primary badge-pill" id="mydiv"></span>
+    </a>
+    <a href="/signout"><i class="glyphicon glyphicon-off"></i> Logout</a>
+</div>
+
+<div class="content">
+    <div id="content">
+        <div id="request-form">
+            <div id="aaa">
+                <h5><i class="glyphicon glyphicon-file"> </i> Group Information</h5>
+            </div>
+            <form id="rform" method="POST" onsubmit="sendreq()">
+                {% csrf_token %}
+                <div>
+                    <label>ID</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-user"></i><input type="text" id="ID"
+                                                                       placeholder="ID" readonly class="not-allowed"
+                                                                       value="{{userdetail.ID}}">
+                    </div>
+                </div>
+                <div>
+                    <label>Code</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-credit-card"></i><input type="text" id="code"
+                                                                              placeholder="CODE" readonly
+                                                                              class="not-allowed">
+                    </div>
+                </div>
+                <div>
+                    <label>Name</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-user"></i><input type="text" id="name"
+                                                                       placeholder="Name" readonly class="not-allowed"
+                                                                       value="{{userdetail.DISP_NAME}}">
+                    </div>
+                </div>
+                <div>
+                    <label>Division</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-briefcase"></i>
+                        <input type="text" placeholder="Division" readonly class="not-allowed">
+                    </div>
+                </div>
+                <div>
+                    <label>Segment</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-hourglass"></i>
+                        <input type="text" placeholder="Segment" readonly class="not-allowed">
+                    </div>
+                </div>
+                <div>
+                    <label>Location</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-globe"></i><input type="text" id="loc" name="loc"
+                                                                        placeholder="Location" required>
+                    </div>
+                </div>
+                <div>
+                    <label>Parent Group</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-level-up"></i>
+                        <input type="text" placeholder="Parent Group" readonly class="not-allowed">
+                    </div>
+                </div>
+                <div>
+                    <label>Customer PIN</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-pushpin"></i><input type="text" id="cpin" name="cpin"
+                                                                          placeholder="Customer PIN" required>
+                    </div>
+                </div>
+                <div>
+                    <label>Role</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-briefcase"></i>
+                        <input type="text" placeholder="Role" readonly class="not-allowed">
+                    </div>
+                </div>
+                <div>
+                    <label>Chorus Code</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-equalizer"></i>
+                        <input type="text" placeholder="Chorus Code" readonly class="not-allowed">
+                    </div>
+                </div>
+                <div>
+                    <label>Responsible</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-blackboard"></i>
+                        <input type="text" placeholder="Responsible" readonly class="not-allowed">
+                    </div>
+                </div>
+                <div>
+                    <label>Account</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-dashboard"></i>
+                        <input type="text" placeholder="Account" readonly class="not-allowed">
+                    </div>
+                </div>
+
+
+                <div>
+                    <label>Max Users</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-user"></i><input type="text" class="not-allowed"
+                                                                       placeholder="Max Users" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Additional Group</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-duplicate"></i><input type="text"
+                                                                            placeholder="Additional Group" required>
+                    </div>
+                </div>
+
+
+                <div>
+                    <label>Description</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-comment"></i>
+                        <textarea name="comment" placeholder="Description" rows="5" cols="53"></textarea>
+                    </div>
+                </div>
+                <div>
+                    <label>Keywords</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-comment"></i>
+                        <textarea id="comment" name="comment" placeholder="Keywords" rows="5" cols="53"></textarea>
+                    </div>
+                </div>
+
+
+            </form>
+            <div id="buttondiv">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="script.js"></script>
+<script src="sendreq.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var steam = ["111", "24342", "321414", "41243", "54765", "623189573", "79857", "8568794853"];
+        $("#steam").select2({
+            data: steam
+        });
+    });
+
+
+
+</script>
+
+<script src="{%static 'js/manager.js' %}"></script>
+<script>ismanager({{userdetail.ADMIN}});</script>
+</html>

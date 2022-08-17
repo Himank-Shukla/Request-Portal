@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User- Additional Group</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    {%load static%}
+    <link rel="stylesheet" href="{%static 'home.css' %}"/>
+    <link rel="stylesheet" href="{%static 'request.css' %}"/>
+
+
+
+
+</head>
+
+<body>
+<div class="topnav">
+    <a href="/" class="logo_div"><img src="{%static 'images/logo.png' %}" alt="Logo" class="logo"/></a>
+    <a href="/" id="back">&lt; Home</a>
+    <a href="/profile" class="split"><img src="{%static 'images/profile.png' %}" alt="profile" class="profile"/></a>
+</div>
+<div class="sidebar">
+    <a href="/"><i class="glyphicon glyphicon-home"></i> Home</a>
+    <a href="#"><i class="glyphicon glyphicon-file"></i> New Requests</a>
+    <a href="/group"><i class="glyphicon glyphicon-user"></i> Group Info.</a>
+    <a href="/myrequests"><i class="glyphicon glyphicon-time"></i> My Requests</a>
+    <a href="/pending" class="manager" id="manager">
+        <i class="glyphicon glyphicon-th-list"></i>Pending Requests
+        <span class="badge badge-primary badge-pill" id="mydiv"></span>
+    </a>
+    <a href="/signout"><i class="glyphicon glyphicon-off"></i> Logout</a>
+</div>
+
+<div class="content">
+    <div id="content">
+        <div id="request-form">
+            <div id="aaa">
+                <h5><i class="glyphicon glyphicon-file"> </i> User- Additional Group</h5>
+            </div>
+            <form id="rform" method="POST" onsubmit="sendreq()">
+                {% csrf_token %}
+                <div>
+                    <label>ID</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-credit-card"></i><input type="text" id="id" name="id"
+                                                                              placeholder="ID" readonly
+                                                                              class="not-allowed"
+                                                                              value="{{userdetail.ID}}">
+                    </div>
+                </div>
+
+                <div>
+                    <label>User</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-user"></i>
+                        <input type="text" id="user" name="user"
+                               placeholder="User" readonly class="not-allowed" value="{{userdetail.LDAP_USERNAME}}">
+                    </div>
+                </div>
+
+                <div>
+                    <label>Additional Group to be added</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-briefcase"></i>
+                        <select id="steam">
+                            <option value="" disabled selected>Select Group</option>
+                            {% for i in response %}
+                            <option value="{{ i.NAME }}">{{ i.NAME }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-top: 3rem; margin-left: 0.5rem;">
+                    <input type="checkbox" id="Revoked" class="Revoked" name="hidden" value="1" checked>
+                    <label for="Revoked"> Is Hidden?</label><br>
+                </div>
+
+            </form>
+            <div id="buttondiv">
+                <button type="submit" id="login" form="rform">Request for Approval</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="{%static 'js/Apprreq.js' %}"></script>
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var steam = ["111", "24342", "321414", "41243", "54765", "623189573", "79857", "8568794853"];
+        $("#steam").select2({
+            data: steam
+        });
+    });
+
+</script>
+
+<script>
+    $("input[type='checkbox']").on('change', function(){
+      $(this).val(this.checked ? "1" : "0");
+      console.log(document.getElementById("Revoked").value);
+    })
+
+</script>
+
+<script src="{%static 'js/manager.js' %}"></script>
+<script>ismanager({{userdetail.ADMIN}});</script>
+</html>

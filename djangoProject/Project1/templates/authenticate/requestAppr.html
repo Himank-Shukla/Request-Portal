@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Team Change</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    {%load static%}
+    <link rel="stylesheet" href="{%static 'home.css' %}"/>
+    <link rel="stylesheet" href="{%static 'request.css' %}"/>
+    <style>.select2-container--open .select2-dropdown--below {
+            margin-top: 0px;
+        }</style>
+</head>
+
+<body>
+<div class="topnav">
+    <a href="/" class="logo_div"><img src="{%static 'images/logo.png' %}" alt="Logo" class="logo"/></a>
+    <a href="/" id="back">&lt; Home</a>
+    <a href="/profile" class="split"><img src="{%static 'images/profile.png' %}" alt="profile" class="profile"/></a>
+</div>
+<div class="sidebar">
+    <a href="/"><i class="glyphicon glyphicon-home"></i> Home</a>
+    <a href="#"><i class="glyphicon glyphicon-file"></i> New Requests</a>
+    <a href="/group"><i class="glyphicon glyphicon-user"></i> Group Info.</a>
+    <a href="/myrequests"><i class="glyphicon glyphicon-time"></i> My Requests</a>
+    <a href="/pending" class="manager" id="manager">
+        <i class="glyphicon glyphicon-th-list"></i>Pending Requests
+        <span class="badge badge-primary badge-pill" id="mydiv"></span>
+    </a>
+    <a href="/signout"><i class="glyphicon glyphicon-off"></i> Logout</a>
+</div>
+f="/signout" ><i class="glyphicon glyphicon-off"></i> Logout</a>
+</div>
+
+<div class="content">
+    <div id="content">
+        <div id="request-form">
+            <div id="aaa">
+                <h5><i class="glyphicon glyphicon-file"> </i> Request for Team Change</h5>
+            </div>
+            <form id="rform" method="POST" onsubmit="sendreq()">
+                {% csrf_token %}
+                <div>
+                    <label>Lastname</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-user"></i><input type="text" id="lastname" name="lastname"
+                                                                       placeholder="Lastname"
+                                                                       value="{{userdetail.LAST_NAME}}"
+                                                                       class="not-allowed" readonly>
+                    </div>
+                </div>
+                <div>
+                    <label>Firstname</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-user"></i><input type="text" id="firstname" name="firstname"
+                                                                       placeholder="First name"
+                                                                       value="{{userdetail.FIRST_NAME}}"
+                                                                       class="not-allowed" readonly>
+                    </div>
+                </div>
+
+
+                <div>
+                    <label>Select Current Team</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-search"></i>
+                        <select id="steam">
+                            <option value="" disabled selected>Select Current Team</option>
+                            {% for i in response %}
+                            <option value="{{ i.NAME }}">{{ i.NAME }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+<!--                    <div class="formGroup">-->
+<!--                        <p class="srch" onClick="myFunction()">-->
+<!--                            <i class="glyphicon glyphicon-search"></i><input autocomplete="off" class="search"-->
+<!--                                                                             type="text"-->
+<!--                                                                             placeholder="Select current team"-->
+<!--                                                                             id="myInput" onkeyup="filterFunction()">-->
+<!--                        </p>-->
+
+<!--                        <div id="app" class="dropdown-content">-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+
+                <div>
+                    <label>Select New Team</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-search"></i>
+                        <select id="nteam">
+                            <option value="" disabled selected>Select New Team</option>
+                            {% for i in response %}
+                            <option value="{{ i.NAME }}">{{ i.NAME }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+<!--                    <div class="formGroup1">-->
+<!--                        <p class="srch1" onClick="myFunction1()">-->
+<!--                            <i class="glyphicon glyphicon-search"></i><input autocomplete="off" class="search1"-->
+<!--                                                                             type="text" placeholder="Select new team"-->
+<!--                                                                             id="myInput1" onkeyup="filterFunction1()">-->
+<!--                        </p>-->
+
+<!--                        <div id="app1" class="dropdown-content1">-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+
+                <div>
+                    <label>Select Approver</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-briefcase"></i>
+                        <select name="Manager" id="Managers">
+                            <option disabled selected>Select Approver</option>
+                            <option value="Manager1">Manager1</option>
+                            <option value="Manager2">Manager2</option>
+                            <option value="Manager3">Manager3</option>
+                            <option value="Manager4">Manager4</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Comment</label>
+                    <div class="div_group">
+                        <i class="glyphicon glyphicon-comment"></i>
+                        <textarea id="comment" name="comment" placeholder="Comments" rows="5" cols="53"></textarea>
+                    </div>
+                </div>
+            </form>
+            <div id="buttondiv">
+                <button type="submit" id="login" form="rform">Request for Approval</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!--<script>-->
+<!--    function myFunction() {-->
+<!--        let elem = document.querySelectorAll(".myInput1");-->
+<!--        elem.forEach(e => e.classList.toggle("dropdown-content_box"));-->
+<!--    }-->
+<!--    function myFunction1() {-->
+<!--        let elem = document.querySelectorAll(".myInput2");-->
+<!--        elem.forEach(e => e.classList.toggle("dropdown-content_box1"));-->
+<!--    }-->
+
+<!--    function func2(id) {-->
+<!--        let elem = document.querySelector(`#${id}`);-->
+<!--        document.querySelector(".search").placeholder = ("" + elem.innerText);-->
+
+<!--        let elem2 = document.querySelectorAll(".myInput1");-->
+<!--        elem2.forEach(e => e.classList.remove("dropdown-content_box"));-->
+
+<!--        let search = document.querySelector(".search");-->
+<!--        search.value = ("" + elem.innerText);-->
+<!--        search.placeholder = ("Search current team");-->
+<!--    }-->
+
+<!--    function func3(id) {-->
+<!--        let elem = document.querySelector(`#${id}`);-->
+<!--        document.querySelector(".search1").placeholder = ("" + elem.innerText);-->
+
+<!--        let elem2 = document.querySelectorAll(".myInput2");-->
+<!--        elem2.forEach(e => e.classList.remove("dropdown-content_box1"));-->
+
+<!--        let search = document.querySelector(".search1");-->
+<!--        search.value = ("" + elem.innerText);-->
+<!--        search.placeholder = ("Search new team");-->
+<!--    }-->
+
+
+<!--    function filterFunction() {-->
+<!--        let input, filter, ul, li, a, i;-->
+<!--        input = document.querySelector(".search");-->
+<!--        filter = input.value.toUpperCase();-->
+<!--        a = document.querySelectorAll(".myInput1");-->
+<!--        //   console.log(a);-->
+<!--        for (i = 0; i < a.length; i++) {-->
+<!--            txtValue = a[i].textContent || a[i].innerText;-->
+<!--            if (txtValue.toUpperCase().indexOf(filter) > -1) {-->
+<!--                a[i].style.display = "";-->
+<!--                a[i].classList.add("dropdown-content_box");-->
+<!--            } else {-->
+<!--                a[i].style.display = "none !important";-->
+<!--                a[i].classList.remove("dropdown-content_box");-->
+<!--            }-->
+<!--        }-->
+<!--    }-->
+
+<!--    function filterFunction1() {-->
+<!--        let input, filter, ul, li, a, i;-->
+<!--        input = document.querySelector(".search1");-->
+<!--        filter = input.value.toUpperCase();-->
+<!--        a = document.querySelectorAll(".myInput2");-->
+
+<!--        for (i = 0; i < a.length; i++) {-->
+<!--            txtValue = a[i].textContent || a[i].innerText;-->
+<!--            if (txtValue.toUpperCase().indexOf(filter) > -1) {-->
+<!--                a[i].style.display = "";-->
+<!--                a[i].classList.add("dropdown-content_box1");-->
+<!--            } else {-->
+<!--                a[i].style.display = "none !important";-->
+<!--                a[i].classList.remove("dropdown-content_box1");-->
+<!--            }-->
+<!--        }-->
+<!--    }-->
+
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var steam = [];
+        $("#steam").select2({
+            data: steam
+        });
+        var nteam = [];
+        $("#nteam").select2({
+            data: steam
+        });
+    });
+
+
+</script>
+
+<!--</script>-->
+<script src="{%static 'js/script.js' %}"></script>
+<script src="{%static 'js/sendreq.js' %}"></script>
+<script src="{%static 'js/manager.js' %}"></script>
+<script>ismanager({{userdetail.ADMIN}});</script>
+
+</html>
